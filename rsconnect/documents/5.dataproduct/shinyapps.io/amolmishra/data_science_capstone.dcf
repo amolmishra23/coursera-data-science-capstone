@@ -1,0 +1,12 @@
+name: data_science_capstone
+title: data_science_capstone
+username:
+account: amolmishra
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 256020
+bundleId: 1171710
+url: https://amolmishra.shinyapps.io/data_science_capstone/
+when: 1515665832.24001
+asMultiple: FALSE
+asStatic: FALSE

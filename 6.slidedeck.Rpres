@@ -1,0 +1,60 @@
+Swiftkey predictive text model
+========================================================
+author: Amol Suraj Mishra
+date: 2018-01-11
+autosize: true
+
+Predict your text
+========================================================
+
+Swiftkey predictive text model demonstrates the power of predictive analytics. For suggesting the next word, based on our typed input.  
+
+This project consists of 3 parts:
+
+- Model
+- Predictive Algorithm
+- Shiny Application
+
+Model
+========================================================
+
+From the supplied data set consisting of textual data from twitter, news and blog data. We have sampled out 15%. This data amounts to 1.4M English tokenized sentences. 
+
+These 1.4M English tokenized sentences were used as input for the n-gram tokenizer. To attain maximum accuracy, we have generated all n-grams untill 7-grams(as far as possible) of all these sentences. And after this frequency table was generated for each unique gram. 
+
+These were stored using a lookup part (all the first n-1 tokens) and the suggested part(the nth gram).
+
+To attain maximum speed, we kept tokens with frequency > 1 only and only unique lookups were included. Thus only 1 suggestion for each lookup combination does exist. 
+
+Predictive Algorithm
+========================================================
+
+Queries submitted are first pre-processed. Followed by tokenizing. Which may result in any number of grams. 
+
+Basically [Stupid Backoff](http://www.aclweb.org/anthology/D07-1090.pdf) algorithm is recursivly applied. 
+
+$$
+S ( w_i|w_{i-1}^{i-k+1} ) =  
+\left\{
+  \begin{array}{ll}
+    \frac{f(w_{i-k+1}^i )}{f(w_{i-k+1}^{i-1} )} \qquad \, \textrm{if} \, f(w_{i-k+1}^i ) >0\\
+    \alpha S(w_{i-k+1}^i ) \quad \textrm{otherwise}
+  \end{array}
+\right.
+$$
+
+- $S$ is used to denote the score, not probabilities. 
+- Pre-computed and stored relative frequencies are denoted by the function.
+- Fixed back-off value is denoted by $\alpha$ which is heuristicly initialized at $0.4$ 
+- All matching grams are aggregated and sorted by their scores in descending order.
+
+Shiny Application
+========================================================
+
+Check it out yourself at: [SWIFTKEY PREDICTIVE TEXT MODEL](https://amolmishra.shinyapps.io/data_science_capstone/)
+
+- All the condensed lookuptables and prediction algorithm develeoped above are stored and made live using a shiny application. 
+- In the backend, the app uses twitter's typeahead plugin for making the user have an experience of autocomplete and suggestion possibilities of the combined model and algorithm. 
+- While typing, whatever partial string is obtained, the algorithm makes suggestions on it. 
+- The combinations suggested by algorithm are reactive in nature. The algorithm is pretty fast so as to give user a comfortable user-experience. 
+
